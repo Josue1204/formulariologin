@@ -9,15 +9,15 @@ import com.spring.formulariologin.models.domain.Usuario;
 import com.spring.formulariologin.service.PaisService;
 import com.spring.formulariologin.service.RoleService;
 import com.spring.formulariologin.validation.UsuarioValidador;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -102,7 +102,30 @@ public class FormController {
     usuario.setIdentificador("123.456.789-k");
     usuario.setHabilitar(true);
     usuario.setValorSecreto("Algun valor secreto***");
-}
+    usuario.setPais(new Pais(3,"Cl","Chile"));
+    usuario.setRoles(Arrays.asList(new Role(2,"Usuario","ROLE_USER")));
 
+    model.addAttribute("titulo","Formulario usuarios");
+    model.addAttribute("usuario",usuario);
+    return "form";
+}
+@PostMapping("/form")
+    public String procesar(@Valid Usuario usuario,BindingResult result, Model model){
+        if (result.hasErrors()){
+            model.addAttribute("titulo","Resultado form");
+            return "form";
+        }
+        return "redirect:/ ver";
+}
+@GetMapping("/ver")
+    public String ver(@SessionAttribute(name ="usuario",required = false )Usuario usuario, Model model,
+                      SessionStatus status){
+        if (usuario== null){
+            return "/redirect:/form";
+        }
+        model.addAttribute("titulo","Resultado form");
+        status.setComplete();
+        return "resultado";
+}
 }
 

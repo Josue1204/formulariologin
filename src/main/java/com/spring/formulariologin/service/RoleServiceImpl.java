@@ -1,10 +1,11 @@
 package com.spring.formulariologin.service;
 
 import com.spring.formulariologin.models.domain.Role;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class RoleServiceImpl implements RoleService{
     private List<Role> roles;
 

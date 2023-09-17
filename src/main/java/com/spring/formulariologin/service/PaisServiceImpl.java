@@ -1,15 +1,17 @@
 package com.spring.formulariologin.service;
 
 import com.spring.formulariologin.models.domain.Pais;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class PaisServiceImpl implements PaisService {
-    private List<Pais> lista;
+    private List<Pais> listar;
 
     public PaisServiceImpl() {
-        this.lista = Arrays.asList(
+        this.listar = Arrays.asList(
                 new Pais(1, "ES", "España"),
                 new Pais(2, "MX", "Mexico"),
                 new Pais(3, "EQ", "Ecuador"),
@@ -24,7 +26,7 @@ public class PaisServiceImpl implements PaisService {
 
     @Override
     public List<Pais> listar() {
-        return lista;
+        return listar;
     }
 
     @Override
