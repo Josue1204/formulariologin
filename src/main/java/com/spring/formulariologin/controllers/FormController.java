@@ -1,5 +1,5 @@
 package com.spring.formulariologin.controllers;
-
+//15 de diciembre, entrega de proyecto
 import com.spring.formulariologin.editors.NombreMayusculaEditor;
 import com.spring.formulariologin.editors.PaisPropertyEditor;
 import com.spring.formulariologin.editors.RolesEditor;
@@ -56,11 +56,11 @@ public class FormController {
     public List<Role>listaRoles(){
         return this.roleService.listar();
     }
-    @ModelAttribute
+    @ModelAttribute("listaPaises")
     public List<Pais>listaPaises(){
         return paisService.listar();
     }
-    @ModelAttribute("listaRolesString")
+    @ModelAttribute("listarRolesString")
     public List<String>listaRolesString(){
         List<String>roles= new ArrayList<>();
         roles.add("ROLE_ADMIN");
@@ -68,64 +68,65 @@ public class FormController {
         roles.add("ROLE_MODERADOR");
         return roles;
     }
-@ModelAttribute("listaRolesMap")
+    @ModelAttribute("listaRolesMap")
     public Map<String,String >listaRolesMap(){
         Map<String,String>roles=new HashMap<>();
         roles.put("ROLES_ADMIN","Administrador");
         roles.put("ROLE_USER","Usuario");
         roles.put("ROLE_MODERADOR","Moderador");
         return roles;
-}
-@ModelAttribute("paises")
-    public List<String>paises(){
+    }
+    @ModelAttribute("pais")
+    public List<String>pais(){
         return Arrays.asList("España","Mexico","Chile","Argentina","Peru","Colombia","Venezuela");
-}
+    }
 
-@ModelAttribute("paisesMap")
+    @ModelAttribute("paisesMap")
     public Map<String,String>paisesMap(){
         Map<String,String>paises=new HashMap<>();
         paises.put("ES","España");
         paises.put("MX","Mexico");
         paises.put("CL","Chile");
-    paises.put("AR","Argentina");
-    paises.put("PE","Peru");
-    paises.put("CO","Colombia");
-    paises.put("VE","Venezuela");
-    return paises;
+        paises.put("AR","Argentina");
+        paises.put("PE","Peru");
+        paises.put("CO","Colombia");
+        paises.put("VE","Venezuela");
+        paises.put("ESA","El Salvador");
+        return paises;
 
-}
-@GetMapping("/form")
+    }
+    @GetMapping("/form")
     public String form (Model model){
-    Usuario usuario=new Usuario();
-    usuario.setNombre("John");
-    usuario.setApellido("Doe");
-    usuario.setIdentificador("123.456.789-k");
-    usuario.setHabilitar(true);
-    usuario.setValorSecreto("Algun valor secreto***");
-    usuario.setPais(new Pais(3,"Cl","Chile"));
-    usuario.setRoles(Arrays.asList(new Role(2,"Usuario","ROLE_USER")));
+        Usuario usuario=new Usuario();
+        usuario.setNombre("John");
+        usuario.setApellido("Doe");
+        usuario.setIdentificador("123.456.789-k");
+        usuario.setHabilitar(true);
+        usuario.setValorSecreto("Algun valor secreto***");
+        usuario.setPais(new Pais(3,"Cl","Chile"));
+        usuario.setRoles(Arrays.asList(new Role(2,"Usuario","ROLE_USER")));
 
-    model.addAttribute("titulo","Formulario usuarios");
-    model.addAttribute("usuario",usuario);
-    return "form";
-}
-@PostMapping("/form")
+        model.addAttribute("titulo","Formulario usuarios");
+        model.addAttribute("usuario",usuario);
+        return "form";
+    }
+    @PostMapping("/form")
     public String procesar(@Valid Usuario usuario,BindingResult result, Model model){
         if (result.hasErrors()){
             model.addAttribute("titulo","Resultado form");
             return "form";
         }
-        return "redirect:/ ver";
-}
-@GetMapping("/ver")
+        return "redirect:/ver";
+    }
+    @GetMapping("/ver")
     public String ver(@SessionAttribute(name ="usuario",required = false )Usuario usuario, Model model,
                       SessionStatus status){
         if (usuario== null){
-            return "/redirect:/form";
+            return "redirect:/form";
         }
         model.addAttribute("titulo","Resultado form");
         status.setComplete();
         return "resultado";
-}
+    }
 }
 
